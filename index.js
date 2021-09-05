@@ -20,7 +20,7 @@ client.queue = new Map();
 
 client.on("ready", () => {
   console.log(chalk.blue(`[API] Connected to ${client.user.username}`));
-  client.user.setActivity("ATRICK OP", { type: "LISTENING" });
+  client.user.setActivity("CayLeon", { type: "LISTENING" });
 });
 
 client.on("message", async message => {
