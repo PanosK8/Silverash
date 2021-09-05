@@ -28,7 +28,8 @@
     "googletrans": "^1.0.3",
     "npmtest-google-translate-api": "^0.0.1",
     "google-trans-api": "^1.0.1",
-    "spotify": "^0.3.0"
+    "spotify": "^0.3.0",
+    "spotify-web-api-node": "^5.0.2"
   },
   "engines": {
     "node": "12.x"
