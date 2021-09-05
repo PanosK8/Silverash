@@ -81,7 +81,7 @@ ${song.duration}
         
         `
         )
-        .setFooter(`ATRICK OP`);
+        .setFooter(`CayLeon`);
       return message.channel.send(thing);
     }
 
@@ -128,7 +128,7 @@ ${song.duration}
 
         .setImage(song.img)
         .setColor("GREEN")
-        .setFooter(`ATRICK OP | ADD ME IN YOUR SERVER`);
+        .setFooter(`CayLeon`);
       queue.textChannel.send(thing);
     };
 
