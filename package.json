@@ -1,3 +1,4 @@
+--npm install ytdl-core@latest
 {
   "name": "MUSIC-BOT",
   "version": "0.0.1",

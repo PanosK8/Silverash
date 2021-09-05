@@ -11,7 +11,9 @@ module.exports = {
   run: async function(client, message, args) {
     const channel = message.member.voice.channel;
     if (!channel) {
-      message.channel.send("I am sorry but you need to be in a voice channel before using this commamd");
+      message.channel.send(
+        "I am sorry but you need to be in a voice channel before using this commamd"
+      );
     }
 
     if (!message.guild.me.hasPermission("CONNECT")) {
@@ -34,7 +36,9 @@ module.exports = {
     }
     var searchString = args.join(" ");
     if (!searchString) {
-      message.channel.send("<:emoji_17:763367241327706118>provide us song' name or song's link");
+      message.channel.send(
+        "<:emoji_17:763367241327706118>provide us song' name or song's link"
+      );
     }
 
     var serverQueue = message.client.queue.get(message.guild.id);
@@ -95,7 +99,7 @@ ${song.duration}
     const play = async song => {
       const queue = message.client.queue.get(message.guild.id);
       if (!song) {
-         message.client.queue.delete(message.guild.id);
+        message.client.queue.delete(message.guild.id);
         return;
       }
 
