@@ -1,45 +1,39 @@
 {
-  "name": "MUSIC-BOT",
-  "version": "0.0.1",
-  "description": "DISCORD.JS LETEST MUSIC BOT",
+  "name": "evobot",
+  "version": "0.15.0",
+  "description": "Discord music bot built with discord.js",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js"
+  "author": "Erit Islami <eritislami@gmail.com>",
+  "private": true,
+  "homepage": "https://github.com/eritislami/evobot",
+  "repository": "github:eritislami/evobot",
+  "bugs": "https://github.com/eritislami/evobot/issues",
+  "engines": {
+    "node": ">=14.0.0"
   },
   "dependencies": {
-    "@discordjs/opus": "^0.6.0",
-    "ascii-table": "^0.0.9",
-    "chalk": "^4.1.2",
-    "discord-canvas": "^1.3.2",
-    "discord.js": "^13.1.0",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "figlet": "^1.5.2",
-    "fs": "^0.0.2",
-    "moment": "^2.29.1",
-    "opusscript": "^0.0.8",
-    "simple-youtube-api": "^5.2.1",
-    "yt-search": "^2.10.0",
+    "@discordjs/opus": "^0.5.3",
+    "array-move": "^3.0.1",
+    "discord.js": "^12.5.1",
+    "ffmpeg-static": "^4.4.0",
+    "i18n": "^0.13.3",
+    "lyrics-finder": "^21.0.5",
+    "simple-youtube-api": "^5.1.1",
+    "soundcloud-downloader": "^0.2.3",
+    "string-progressbar": "^1.0.4",
     "ytdl-core": "^4.9.1",
-    "ytdl-core-discord": "^1.3.1",
-    "yt-player": "^3.5.0",
-    "ergytdl": "^1.0.0",
-    "npmdoc-google-translate": "^2017.4.26",
-    "googletrans": "^1.0.3",
-    "npmtest-google-translate-api": "^0.0.1",
-    "google-trans-api": "^1.0.1",
-    "spotify": "^0.3.0",
-    "spotify-web-api-node": "^5.0.2"
+    "ytdl-core-discord": "^1.3.1"
   },
-  "engines": {
-    "node": "12.x"
+  "scripts": {
+    "start": "node index.js",
+    "commit": "cz"
   },
-  "repository": {
-    "url": ""
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.3.0"
   },
-  "license": "MIT",
-  "keywords": [
-    "MUSIC",
-    "GAMING"
-  ]
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }

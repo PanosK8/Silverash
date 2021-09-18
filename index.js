@@ -1,52 +1,87 @@
+/**
+ * Module Imports
+ */
 const { Client, Collection } = require("discord.js");
-const { config } = require("dotenv");
-const chalk = require("chalk");
-const figlet = require("figlet");
-const { prefix } = require("./config.json");
+const { readdirSync } = require("fs");
+const { join } = require("path");
+const { TOKEN, PREFIX } = require("./util/Util");
+const i18n = require("./util/i18n");
 
 const client = new Client({
-  disableEveryone: true
+  disableMentions: "everyone",
+  restTimeOffset: 0
 });
 
-// Collections
+client.login(TOKEN);
 client.commands = new Collection();
-client.aliases = new Collection();
+client.prefix = PREFIX;
 client.queue = new Map();
+const cooldowns = new Collection();
+const escapeRegex = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-// Run the command loader
-["command"].forEach(handler => {
-  require(`./handlers/${handler}`)(client);
-});
-
+/**
+ * Client Events
+ */
 client.on("ready", () => {
-  console.log(chalk.blue(`[API] Connected to ${client.user.username}`));
-  client.user.setActivity("CayLeon", { type: "LISTENING" });
+  console.log(`${client.user.username} ready!`);
+  client.user.setActivity(`${PREFIX}help and ${PREFIX}play`, { type: "LISTENING" });
 });
+client.on("warn", (info) => console.log(info));
+client.on("error", console.error);
 
-client.on("message", async message => {
+/**
+ * Import all commands
+ */
+const commandFiles = readdirSync(join(__dirname, "commands")).filter((file) => file.endsWith(".js"));
+for (const file of commandFiles) {
+  const command = require(join(__dirname, "commands", `${file}`));
+  client.commands.set(command.name, command);
+}
+
+client.on("message", async (message) => {
   if (message.author.bot) return;
   if (!message.guild) return;
-  if (!message.content.startsWith(prefix)) return;
 
-  // If message.member is uncached, cache it.
-  if (!message.member)
-    message.member = await message.guild.fetchMember(message);
+  const prefixRegex = new RegExp(`^(<@!?${client.user.id}>|${escapeRegex(PREFIX)})\\s*`);
+  if (!prefixRegex.test(message.content)) return;
 
-  const args = message.content
-    .slice(prefix.length)
-    .trim()
-    .split(/ +/g);
-  const cmd = args.shift().toLowerCase();
+  const [, matchedPrefix] = message.content.match(prefixRegex);
 
-  if (cmd.length === 0) return;
+  const args = message.content.slice(matchedPrefix.length).trim().split(/ +/);
+  const commandName = args.shift().toLowerCase();
 
-  // Get the command
-  let command = client.commands.get(cmd);
-  // If none is found, try to find it by alias
-  if (!command) command = client.commands.get(client.aliases.get(cmd));
+  const command =
+    client.commands.get(commandName) ||
+    client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
-  // If a command is finally found, run the command
-  if (command) command.run(client, message, args);
+  if (!command) return;
+
+  if (!cooldowns.has(command.name)) {
+    cooldowns.set(command.name, new Collection());
+  }
+
+  const now = Date.now();
+  const timestamps = cooldowns.get(command.name);
+  const cooldownAmount = (command.cooldown || 1) * 1000;
+
+  if (timestamps.has(message.author.id)) {
+    const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
+
+    if (now < expirationTime) {
+      const timeLeft = (expirationTime - now) / 1000;
+      return message.reply(
+        i18n.__mf("common.cooldownMessage", { time: timeLeft.toFixed(1), name: command.name })
+      );
+    }
+  }
+
+  timestamps.set(message.author.id, now);
+  setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+
+  try {
+    command.execute(message, args);
+  } catch (error) {
+    console.error(error);
+    message.reply(i18n.__("common.errorCommand")).catch(console.error);
+  }
 });
-
-client.login(process.env.TOKEN);
