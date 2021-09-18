@@ -7,7 +7,7 @@ const { join } = require("path");
 const { TOKEN, PREFIX } = require("./util/Util");
 const i18n = require("./util/i18n");
 
-const client = new Client({
+const client = new Discord.Client({
   disableMentions: "everyone",
   restTimeOffset: 0
 });
