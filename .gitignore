@@ -1,4 +1,4 @@
-
+/config.json
 /.idea
 /.vscode
 
@@ -58,4 +58,4 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-
+ 
